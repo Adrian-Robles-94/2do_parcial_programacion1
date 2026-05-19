@@ -1,7 +1,4 @@
-from utilidades import (
-    es_letra,
-    calcular_longitud
-)
+from utilidades import es_letra, calcular_longitud
 
 
 def validar_contrasena_vacia(contrasena: str) -> bool:
@@ -100,24 +97,15 @@ def validar_contrasena(contrasena: str) -> bool:
         return False
 
     if not validar_longitud_minima(contrasena):
-        print(
-            "Error. La contraseña debe tener "
-            "al menos 8 caracteres."
-        )
+        print("Error. La contraseña debe tener " "al menos 8 caracteres.")
         return False
 
     if not validar_primer_caracter(contrasena):
-        print(
-            "Error. La contraseña no puede "
-            "comenzar con espacios."
-        )
+        print("Error. La contraseña no puede " "comenzar con espacios.")
         return False
 
     if not validar_contiene_letra(contrasena):
-        print(
-            "Error. La contraseña debe "
-            "contener al menos una letra."
-        )
+        print("Error. La contraseña debe " "contener al menos una letra.")
         return False
 
     return True
@@ -136,9 +124,7 @@ def pedir_contrasena() -> str:
 
     while True:
 
-        contrasena = input(
-            "\nIngrese una contraseña: "
-        )
+        contrasena = input("\nIngrese una contraseña: ")
 
         if validar_contrasena(contrasena):
             break

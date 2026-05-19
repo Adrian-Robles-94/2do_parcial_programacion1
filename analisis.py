@@ -1,9 +1,4 @@
-from utilidades import (
-    es_letra,
-    es_numero,
-    es_simbolo,
-    calcular_longitud
-)
+from utilidades import es_letra, es_numero, es_simbolo, calcular_longitud
 
 
 def validar_nivel_seguridad(contrasena: str) -> None:
@@ -36,18 +31,10 @@ def validar_nivel_seguridad(contrasena: str) -> None:
         elif es_simbolo(caracter):
             cantidad_simbolos += 1
 
-    if (
-        longitud >= 8
-        and longitud <= 9
-        and cantidad_letras == longitud
-    ):
+    if longitud >= 8 and longitud <= 9 and cantidad_letras == longitud:
         print("\nNivel de seguridad: DÉBIL")
 
-    elif (
-        cantidad_letras > 0
-        and cantidad_numeros > 0
-        and cantidad_simbolos == 0
-    ):
+    elif cantidad_letras > 0 and cantidad_numeros > 0 and cantidad_simbolos == 0:
         print("\nNivel de seguridad: MEDIA")
 
     elif (
@@ -62,10 +49,7 @@ def validar_nivel_seguridad(contrasena: str) -> None:
         print("\nLa contraseña no cumple criterios suficientes.")
 
 
-def buscar_caracter(
-    contrasena: str,
-    caracter_buscado: str
-) -> None:
+def buscar_caracter(contrasena: str, caracter_buscado: str) -> None:
     """
     Busca un carácter dentro de la contraseña
     mostrando cantidad de apariciones y posiciones.
@@ -88,10 +72,7 @@ def buscar_caracter(
 
         posicion += 1
 
-    print(
-        f"\nEl carácter '{caracter_buscado}' "
-        f"aparece {cantidad} veces."
-    )
+    print(f"\nEl carácter '{caracter_buscado}' " f"aparece {cantidad} veces.")
 
 
 def mostrar_contrasena_invertida(contrasena: str) -> None:

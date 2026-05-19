@@ -1,10 +1,4 @@
-from utilidades import (
-    es_letra,
-    es_numero,
-    es_simbolo,
-    es_espacio,
-    calcular_longitud
-)
+from utilidades import es_letra, es_numero, es_simbolo, es_espacio, calcular_longitud
 
 
 def contar_tipos_caracteres(contrasena: str) -> None:
@@ -122,42 +116,21 @@ def generar_reporte_estadistico(contrasena: str) -> None:
 
     longitud_total = calcular_longitud(contrasena)
 
-    porcentaje_letras = calcular_porcentaje(
-        letras,
-        longitud_total
-    )
+    porcentaje_letras = calcular_porcentaje(letras, longitud_total)
 
-    porcentaje_numeros = calcular_porcentaje(
-        numeros,
-        longitud_total
-    )
+    porcentaje_numeros = calcular_porcentaje(numeros, longitud_total)
 
-    porcentaje_simbolos = calcular_porcentaje(
-        simbolos,
-        longitud_total
-    )
+    porcentaje_simbolos = calcular_porcentaje(simbolos, longitud_total)
 
     repetidos = contar_repetidos_consecutivos(contrasena)
 
     print("\n--- REPORTE ESTADÍSTICO ---")
     print(f"Longitud total: {longitud_total}")
 
-    print(
-        f"Porcentaje de letras: "
-        f"{porcentaje_letras:.2f}%"
-    )
+    print(f"Porcentaje de letras: " f"{porcentaje_letras:.2f}%")
 
-    print(
-        f"Porcentaje de números: "
-        f"{porcentaje_numeros:.2f}%"
-    )
+    print(f"Porcentaje de números: " f"{porcentaje_numeros:.2f}%")
 
-    print(
-        f"Porcentaje de símbolos: "
-        f"{porcentaje_simbolos:.2f}%"
-    )
+    print(f"Porcentaje de símbolos: " f"{porcentaje_simbolos:.2f}%")
 
-    print(
-        f"Cantidad de caracteres repetidos consecutivos: "
-        f"{repetidos}"
-    )   
+    print(f"Cantidad de caracteres repetidos consecutivos: " f"{repetidos}")

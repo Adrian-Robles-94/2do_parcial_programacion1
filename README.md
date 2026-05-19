@@ -36,5 +36,5 @@ El sistema permite ingresar y analizar contraseñas mediante un menú interactiv
 ## 🚀 Cómo ejecutar el proyecto
 
 1. Clonar el repositorio:
-```bash
+```bash 
 git clone https://github.com/Adrian-Robles-94/1er-parcial-practico-progra1
