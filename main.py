@@ -1,10 +1,136 @@
-#La funcion se llama: calcular_precio_con_iva
+from utilidades import (
+    mostrar_menu,
+    pedir_opcion_menu
+)
+
+from validaciones import (
+    pedir_contrasena
+)
+
+from analisis import (
+    validar_nivel_seguridad,
+    buscar_caracter,
+    mostrar_contrasena_invertida,
+    verificar_palindromo
+)
+
+from estadisticas import (
+    contar_tipos_caracteres,
+    generar_reporte_estadistico
+)
 
 
-def calcular_precio_con_iva(valor_sin_iva, iva = 21):  # (Parametro obligatorio, parametro opcional) 
-    '''Suma el iva al precio, por defecto toma el 21%'''  # Esto es documentacion y es obligatoria para explicar la función
-    resultado = valor_sin_iva * (1 + (iva / 100)) # "resultado", es una variable local que contiene la ecuacion de la funcion.
-    return resultado # aca retornamos el resultado en su variable local
+def main() -> None:
+    """
+    Función principal del programa.
+    Controla el menú y las funcionalidades.
+    """
 
-print(calcular_precio_con_iva(100)) #Al no definir el segundo parametro, se va a ejecutar automaticamente el opcional que armamos. (IVA = 21) = ""121""
-print(calcular_precio_con_iva(100, 10)) #Aca definimos el segundo parametro, por lo tanto, no se va ejecutar el opcional = ""110""
+    contrasena = ""
+
+    while True:
+
+        mostrar_menu()
+
+        opcion = pedir_opcion_menu()
+
+        if opcion == 1:
+
+            contrasena = pedir_contrasena()
+
+            print("\nContraseña guardada correctamente.")
+
+        elif opcion == 2:
+
+            if contrasena == "":
+                print(
+                    "\nPrimero debe ingresar "
+                    "una contraseña."
+                )
+
+            else:
+                validar_nivel_seguridad(contrasena)
+
+        elif opcion == 3:
+
+            if contrasena == "":
+                print(
+                    "\nPrimero debe ingresar "
+                    "una contraseña."
+                )
+
+            else:
+                contar_tipos_caracteres(contrasena)
+
+        elif opcion == 4:
+
+            if contrasena == "":
+                print(
+                    "\nPrimero debe ingresar "
+                    "una contraseña."
+                )
+
+            else:
+
+                caracter = input(
+                    "\nIngrese un carácter a buscar: "
+                )
+
+                buscar_caracter(
+                    contrasena,
+                    caracter
+                )
+
+        elif opcion == 5:
+
+            if contrasena == "":
+                print(
+                    "\nPrimero debe ingresar "
+                    "una contraseña."
+                )
+
+            else:
+                mostrar_contrasena_invertida(
+                    contrasena
+                )
+
+        elif opcion == 6:
+
+            if contrasena == "":
+                print(
+                    "\nPrimero debe ingresar "
+                    "una contraseña."
+                )
+
+            else:
+                generar_reporte_estadistico(
+                    contrasena
+                )
+
+        elif opcion == 7:
+
+            if contrasena == "":
+                print(
+                    "\nPrimero debe ingresar "
+                    "una contraseña."
+                )
+
+            else:
+                verificar_palindromo(
+                    contrasena
+                )
+
+        elif opcion == 8:
+
+            print(
+                "\nLa funcionalidad de ordenamiento "
+                "todavía no fue implementada."
+            )
+
+        elif opcion == 9:
+
+            print("\nPrograma finalizado.")
+            break
+
+
+main()
