@@ -1,92 +1,61 @@
-from utilidades import mostrar_menu, pedir_opcion_menu
+import archivos
+import alumnos
+import estadisticas
 
-from validaciones import pedir_contrasena
+# Definición de la ruta del archivo de persistencia como constante global
+RUTA_BASE_DATOS = "alumnos.json"
 
-from analisis import (
-    validar_nivel_seguridad,
-    buscar_caracter,
-    mostrar_contrasena_invertida,
-    verificar_palindromo,
-)
-
-from estadisticas import contar_tipos_caracteres, generar_reporte_estadistico
-
-
-def main() -> None:
+def mostrar_menu() -> None:
     """
-    Función principal del programa.
-    Controla el menú y las funcionalidades.
+    Imprime en la consola la interfaz visual del menú interactivo.
+    Mantiene un diseño limpio y profesional para el operador.
     """
+    print("\n========================================")
+    print("      SISTEMA DE GESTIÓN DE ALUMNOS     ")
+    print("========================================")
+    print("1. Registrar Alumno (Alta)")
+    print("2. Listar Alumnos")
+    print("3. Buscar Alumno por DNI")
+    print("4. Modificar Alumno (Actualización)")
+    print("5. Eliminar Alumno (Baja)")
+    print("6. Mostrar Informe Estadístico")
+    print("7. Salir del Sistema")
+    print("========================================")
 
-    contrasena = ""
 
+def ejecutar_aplicacion() -> None:
+    """
+    Función principal que controla el ciclo de vida de la aplicación.
+    Orquesta la carga inicial de datos y el bucle de interacción.
+    """
+    # Carga inicial automatizada de datos desde el archivo JSON
+    diccionario_alumnos = archivos.cargar_alumnos(RUTA_BASE_DATOS)
+    
     while True:
-
         mostrar_menu()
-        opcion = pedir_opcion_menu()
-
-        if opcion == 1:
-            contrasena = pedir_contrasena()
-
-            print("\nContraseña guardada correctamente.")
-
-        elif opcion == 2:
-
-            if contrasena == "":
-                print("\nPrimero debe ingresar una contraseña.")
-            else:
-                validar_nivel_seguridad(contrasena)
-
-        elif opcion == 3:
-
-            if contrasena == "":
-                print("\nPrimero debe ingresar una contraseña.")
-            else:
-                contar_tipos_caracteres(contrasena)
-
-        elif opcion == 4:
-
-            if contrasena == "":
-                print("\nPrimero debe ingresar una contraseña.")
-
-            else:
-
-                caracter = input("\nIngrese un carácter a buscar: ")
-
-                buscar_caracter(contrasena, caracter)
-
-        elif opcion == 5:
-
-            if contrasena == "":
-                print("\nPrimero debe ingresar " "una contraseña.")
-
-            else:
-                mostrar_contrasena_invertida(contrasena)
-
-        elif opcion == 6:
-
-            if contrasena == "":
-                print("\nPrimero debe ingresar " "una contraseña.")
-
-            else:
-                generar_reporte_estadistico(contrasena)
-
-        elif opcion == 7:
-
-            if contrasena == "":
-                print("\nPrimero debe ingresar " "una contraseña.")
-
-            else:
-                verificar_palindromo(contrasena)
-
-        elif opcion == 8:
-
-            print("\nLa funcionalidad de ordenamiento " "todavía no fue implementada.")
-
-        elif opcion == 9:
-
-            print("\nPrograma finalizado.")
+        opcion = input("Seleccione una opción (1-7): ").strip()
+        
+        # Estructura de control selectiva para derivar la lógica
+        if opcion == "1":
+            alumnos.registrar_alumno(diccionario_alumnos, RUTA_BASE_DATOS)
+        elif opcion == "2":
+            alumnos.listar_alumnos(diccionario_alumnos)
+        elif opcion == "3":
+            alumnos.buscar_alumno(diccionario_alumnos)
+        elif opcion == "4":
+            alumnos.modificar_alumno(diccionario_alumnos, RUTA_BASE_DATOS)
+        elif opcion == "5":
+            alumnos.eliminar_alumno(diccionario_alumnos, RUTA_BASE_DATOS)
+        elif opcion == "6":
+            estadisticas.mostrar_informe_estadistico(diccionario_alumnos)
+        elif opcion == "7":
+            print("\nFinalizando ejecución. Sincronización con el almacenamiento exitosa. ¡Hasta luego!")
             break
+        else:
+            # Control analítico de errores: previene que opciones inválidas rompan el flujo
+            print("Error: Opción inválida. Por favor, ingrese un número entero del 1 al 7.")
 
 
-main()
+# Punto de entrada exclusivo del programa
+if __name__ == "__main__":
+    ejecutar_aplicacion()

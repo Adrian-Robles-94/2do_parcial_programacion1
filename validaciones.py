@@ -1,132 +1,58 @@
-from utilidades import es_letra, calcular_longitud
-
-
-def validar_contrasena_vacia(contrasena: str) -> bool:
+def validar_dni_formato(dni_str: str) -> bool:
     """
-    Verifica si la contraseña está vacía.
-
-    Args:
-        contrasena (str): contraseña a validar.
-
-    Returns:
-        bool: True si es válida, False si está vacía.
+    Verifica que la cadena ingresada contenga únicamente dígitos numéricos
+    y cumpla con una longitud razonable para un DNI.
     """
+    # Elimina espacios en blanco accidentales antes de validar
+    dni_limpio = dni_str.strip()
+    return dni_limpio.isdigit() and len(dni_limpio) >= 7 and len(dni_limpio) <= 9
 
-    if calcular_longitud(contrasena) == 0:
-        return False
-
-    return True
-
-
-def validar_longitud_minima(contrasena: str) -> bool:
+def validar_dni_duplicado(dni: str, diccionario_alumnos: dict) -> bool:
     """
-    Verifica si la contraseña tiene
-    al menos 8 caracteres.
-
-    Args:
-        contrasena (str): contraseña a validar.
-
-    Returns:
-        bool: True si cumple la longitud mínima.
+    Comprueba si el DNI ya se encuentra registrado como clave principal 
+    dentro del diccionario de alumnos del sistema.
     """
+    return dni in diccionario_alumnos
 
-    if calcular_longitud(contrasena) >= 8:
-        return True
-
-    return False
-
-
-def validar_primer_caracter(contrasena: str) -> bool:
+def validar_edad(edad_str: str) -> int | None:
     """
-    Verifica que la contraseña
-    no comience con espacio.
-
-    Args:
-        contrasena (str): contraseña a validar.
-
-    Returns:
-        bool: True si el primer carácter es válido.
+    Valida que la edad ingresada sea un número entero y que no sea negativa.
+    Si es válida, devuelve el valor convertido a entero. Si no, devuelve None.
     """
+    edad_limpia = edad_str.strip()
+    if not edad_limpia.isdigit():
+        return None
+    
+    edad_num = int(edad_limpia)
+    # Condición métrica obligatoria: no se permiten edades negativas
+    if edad_num < 0:
+        return None
+        
+    return edad_num
 
-    if ord(contrasena[0]) == 32:
-        return False
-
-    return True
-
-
-def validar_contiene_letra(contrasena: str) -> bool:
+def validar_nota(nota_str: str) -> float | None:
     """
-    Verifica si la contraseña
-    contiene al menos una letra.
-
-    Args:
-        contrasena (str): contraseña a validar.
-
-    Returns:
-        bool: True si contiene letras.
+    Valida que la nota ingresada corresponda a un valor numérico real (float)
+    y que se encuentre estrictamente dentro del rango académico de 0 a 10.
+    Si es válida, devuelve el float. Si no, devuelve None.
     """
+    nota_limpia = nota_str.strip().replace(",", ".") # Soporta tanto puntos como comas decimales
+    
+    try:
+        nota_num = float(nota_limpia)
+        # Condición métrica obligatoria: rango estricto entre 0 y 10
+        if nota_num >= 0.0 and nota_num <= 10.0:
+            return nota_num
+        return None
+    except ValueError:
+        return None
 
-    for caracter in contrasena:
-
-        if es_letra(caracter):
-            return True
-
-    return False
-
-
-def validar_contrasena(contrasena: str) -> bool:
+def validar_texto_vacio(texto_str: str) -> str | None:
     """
-    Ejecuta todas las validaciones obligatorias
-    de la contraseña.
-
-    Validaciones:
-    - no vacía
-    - mínimo 8 caracteres
-    - no comenzar con espacio
-    - contener al menos una letra
-
-    Args:
-        contrasena (str): contraseña a validar.
-
-    Returns:
-        bool: True si la contraseña es válida.
+    Asegura que campos alfabéticos críticos (Nombre, Apellido) no queden
+    vacíos o constituidos puramente por espacios en blanco.
     """
-
-    if not validar_contrasena_vacia(contrasena):
-        print("Error. La contraseña no puede estar vacía.")
-        return False
-
-    if not validar_longitud_minima(contrasena):
-        print("Error. La contraseña debe tener " "al menos 8 caracteres.")
-        return False
-
-    if not validar_primer_caracter(contrasena):
-        print("Error. La contraseña no puede " "comenzar con espacios.")
-        return False
-
-    if not validar_contiene_letra(contrasena):
-        print("Error. La contraseña debe " "contener al menos una letra.")
-        return False
-
-    return True
-
-
-def pedir_contrasena() -> str:
-    """
-    Solicita una contraseña al usuario
-    hasta que sea válida.
-
-    Returns:
-        str: contraseña válida.
-    """
-
-    contrasena = ""
-
-    while True:
-
-        contrasena = input("\nIngrese una contraseña: ")
-
-        if validar_contrasena(contrasena):
-            break
-
-    return contrasena
+    texto_limpio = texto_str.strip()
+    if len(texto_limpio) == 0:
+        return None
+    return texto_limpio.title() # Normaliza el texto guardándolo con formato de Nombre Propio

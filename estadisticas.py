@@ -1,136 +1,106 @@
-from utilidades import es_letra, es_numero, es_simbolo, es_espacio, calcular_longitud
-
-
-def contar_tipos_caracteres(contrasena: str) -> None:
+def calcular_promedio_notas(diccionario_alumnos: dict) -> float:
     """
-    Cuenta la cantidad de letras, números,
-    símbolos y espacios presentes en la contraseña.
-
-    Args:
-        contrasena (str): contraseña a analizar.
+    Calcula la media aritmética de las notas de todos los alumnos registrados.
+    Si el diccionario está vacío, retorna 0.0 para evitar divisiones por cero.
     """
-
-    cantidad_letras = 0
-    cantidad_numeros = 0
-    cantidad_simbolos = 0
-    cantidad_espacios = 0
-
-    for caracter in contrasena:
-
-        if es_letra(caracter):
-            cantidad_letras += 1
-
-        elif es_numero(caracter):
-            cantidad_numeros += 1
-
-        elif es_espacio(caracter):
-            cantidad_espacios += 1
-
-        elif es_simbolo(caracter):
-            cantidad_simbolos += 1
-
-    print("\n--- TIPOS DE CARACTERES ---")
-    print(f"Letras: {cantidad_letras}")
-    print(f"Números: {cantidad_numeros}")
-    print(f"Símbolos: {cantidad_simbolos}")
-    print(f"Espacios: {cantidad_espacios}")
+    if not diccionario_alumnos:
+        return 0.0
+        
+    total_notas = 0.0
+    for datos in diccionario_alumnos.values():
+        total_notas += datos["nota"]
+        
+    return total_notas / len(diccionario_alumnos)
 
 
-def calcular_porcentaje(parte: int, total: int) -> float:
+def obtener_alumno_nota_maxima(diccionario_alumnos: dict) -> tuple | None:
     """
-    Calcula el porcentaje entre dos valores.
-
-    Args:
-        parte (int): valor parcial.
-        total (int): valor total.
-
-    Returns:
-        float: porcentaje calculado.
+    Analiza los registros para identificar la nota más alta.
+    Retorna una tupla con (DNI, diccionario_datos) del alumno con mejor desempeño.
+    Si hay empate, devuelve el primero encontrado. Si está vacío, retorna None.
     """
+    if not diccionario_alumnos:
+        return None
 
-    if total == 0:
+    mejor_dni = None
+    mejor_nota = -1.0 # Inicialización por debajo del límite mínimo válido
+
+    for dni, datos in diccionario_alumnos.items():
+        if datos["nota"] > mejor_nota:
+            mejor_nota = datos["nota"]
+            mejor_dni = dni
+
+    return mejor_dni, diccionario_alumnos[mejor_dni]
+
+
+def calcular_distribucion_academica(diccionario_alumnos: dict) -> dict:
+    """
+    Clasifica y cuenta cuantitativamente a los alumnos según criterios académicos estándar:
+    - Promocionados (Aprobación Directa): Nota >= 7.0
+    - Regulares (Aprobación No Directa): 4.0 <= Nota < 7.0
+    - Libres / Reprobados: Nota < 4.0
+    """
+    distribucion = {
+        "promocionados": 0,
+        "regulares": 0,
+        "libres": 0
+    }
+
+    for datos in diccionario_alumnos.values():
+        nota = datos["nota"]
+        if nota >= 7.0:
+            distribucion["promocionados"] += 1
+        elif nota >= 4.0:
+            distribucion["regulares"] += 1
+        else:
+            distribucion["libres"] += 1
+
+    return distribucion
+
+
+def calcular_promedio_edad(diccionario_alumnos: dict) -> float:
+    """
+    Calcula la edad promedio del grupo estudiantil registrado.
+    Maneja el caso de diccionario vacío retornando 0.0.
+    """
+    if not diccionario_alumnos:
         return 0.0
 
-    porcentaje = (parte * 100) / total
+    total_edad = 0
+    for datos in diccionario_alumnos.values():
+        total_edad += datos["edad"]
 
-    return porcentaje
+    return total_edad / len(diccionario_alumnos)
 
 
-def contar_repetidos_consecutivos(contrasena: str) -> int:
+def mostrar_informe_estadistico(diccionario_alumnos: dict) -> None:
     """
-    Cuenta grupos de caracteres repetidos consecutivos.
-
-    Ejemplo:
-    aaBB22!!
-    devuelve 4.
-
-    Args:
-        contrasena (str): contraseña a analizar.
-
-    Returns:
-        int: cantidad de repeticiones consecutivas.
+    Orquesta las funciones de cálculo de este módulo para presentar en pantalla
+    un informe estadístico consolidado, claro y limpio.
     """
+    print("\n--- Informe Estadístico del Sistema ---")
+    if not diccionario_alumnos:
+        print("No hay datos suficientes en el sistema para generar estadísticas.")
+        return
 
-    repeticiones = 0
-    longitud = calcular_longitud(contrasena)
+    total_alumnos = len(diccionario_alumnos)
+    promedio_notas = calcular_promedio_notas(diccionario_alumnos)
+    promedio_edad = calcular_promedio_edad(diccionario_alumnos)
+    distribucion = calcular_distribucion_academica(diccionario_alumnos)
+    mejor_registro = obtener_alumno_nota_maxima(diccionario_alumnos)
 
-    indice = 0
+    # Impresión métrica
+    print(f"Total de alumnos evaluados: {total_alumnos}")
+    print(f"Promedio general de notas:  {promedio_notas:.2f}")
+    print(f"Promedio de edad del grupo: {promedio_edad:.1f} años")
+    
+    print("\n[Distribución de Estados Académicos]")
+    print(f" -> Alumnos Promocionados (>= 7):  {distribucion['promocionados']} ({(distribucion['promocionados']/total_alumnos)*100:.1f}%)")
+    print(f" -> Alumnos Regulares (4 a 6.9):   {distribucion['regulares']} ({(distribucion['regulares']/total_alumnos)*100:.1f}%)")
+    print(f" -> Alumnos Libres / Reprobados (< 4): {distribucion['libres']} ({(distribucion['libres']/total_alumnos)*100:.1f}%)")
 
-    while indice < longitud - 1:
-
-        if contrasena[indice] == contrasena[indice + 1]:
-            repeticiones += 1
-
-        indice += 1
-
-    return repeticiones
-
-
-def generar_reporte_estadistico(contrasena: str) -> None:
-    """
-    Genera un reporte estadístico completo
-    sobre la contraseña ingresada.
-
-    Args:
-        contrasena (str): contraseña a analizar.
-    """
-
-    letras = 0
-    numeros = 0
-    simbolos = 0
-    espacios = 0
-
-    for caracter in contrasena:
-
-        if es_letra(caracter):
-            letras += 1
-
-        elif es_numero(caracter):
-            numeros += 1
-
-        elif es_espacio(caracter):
-            espacios += 1
-
-        elif es_simbolo(caracter):
-            simbolos += 1
-
-    longitud_total = calcular_longitud(contrasena)
-
-    porcentaje_letras = calcular_porcentaje(letras, longitud_total)
-
-    porcentaje_numeros = calcular_porcentaje(numeros, longitud_total)
-
-    porcentaje_simbolos = calcular_porcentaje(simbolos, longitud_total)
-
-    repetidos = contar_repetidos_consecutivos(contrasena)
-
-    print("\n--- REPORTE ESTADÍSTICO ---")
-    print(f"Longitud total: {longitud_total}")
-
-    print(f"Porcentaje de letras: " f"{porcentaje_letras:.2f}%")
-
-    print(f"Porcentaje de números: " f"{porcentaje_numeros:.2f}%")
-
-    print(f"Porcentaje de símbolos: " f"{porcentaje_simbolos:.2f}%")
-
-    print(f"Cantidad de caracteres repetidos consecutivos: " f"{repetidos}")
+    if mejor_registro:
+        dni, datos = mejor_registro
+        print("\n[Rendimiento Destacado]")
+        print(f" -> Alumno con Mayor Nota: {datos['apellido']}, {datos['nombre']} (DNI: {dni})")
+        print(f" -> Calificación Obtenida: {datos['nota']:.2f}")
