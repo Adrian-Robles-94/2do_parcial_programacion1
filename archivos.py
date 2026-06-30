@@ -1,27 +1,35 @@
-import json
 import os
+import json
 
-def cargar_alumnos(ruta_archivo: str) -> dict:
+def cargar_datos():
     """
-    Carga los datos del archivo JSON. Si el archivo no existe,
-    gestiona la excepción retornando un diccionario vacío.
+    Busca y lee el archivo JSON local para cargar los datos en el programa.
+    
+    Args:
+        Ninguno.
+        
+    Returns:
+        dict: Un diccionario con los datos de los alumnos si el archivo existe,
+              o un diccionario vacío si el archivo no es encontrado.
     """
-    if not os.path.exists(ruta_archivo):
-        return {}
-    try:
-        with open(ruta_archivo, "r", encoding="utf-8") as archivo:
-            return json.load(archivo)
-    except (json.JSONDecodeError, IOError):
-        return {}
+    if os.path.exists("alumnos.json"):
+        with open("alumnos.json", "r") as archivo:
+            datos = json.load(archivo)
+            return datos
+    else:
+        diccionario_vacio = {}
+        return diccionario_vacio
 
-def guardar_alumnos(ruta_archivo: str, diccionario_alumnos: dict) -> bool:
+def guardar_datos(alumnos):
     """
-    Guarda de forma persistente la información en formato JSON.
+    Guarda el diccionario de alumnos de la memoria RAM en el archivo JSON físico.
+    
+    Args:
+        alumnos (dict): El diccionario principal que contiene a todos los estudiantes.
+        
+    Returns:
+        None.
     """
-    try:
-        with open(ruta_archivo, "w", encoding="utf-8") as archivo:
-            json.dump(diccionario_alumnos, archivo, indent=4, ensure_ascii=False)
-            return True
-    except IOError:
-        print("Error: No se pudo escribir en el archivo de almacenamiento.")
-        return False
+    with open("alumnos.json", "w") as archivo:
+        # El parámetro indent=4 hace que el JSON se guarde tabulado y fácil de leer
+        json.dump(alumnos, archivo, indent=4)

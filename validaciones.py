@@ -1,64 +1,98 @@
-def validar_dni_formato(dni_str: str) -> bool:
+def validar_dni(mensaje):
     """
-    Verifica que la cadena ingresada contenga únicamente dígitos numéricos
-    y cumpla con una longitud razonable para un DNI.
-    """
-    dni_limpio = dni_str.strip()
-    return dni_limpio.isdigit() and len(dni_limpio) >= 7 and len(dni_limpio) <= 9
-
-def validar_dni_duplicado(dni: str, diccionario_alumnos: dict) -> bool:
-    """
-    Comprueba si el DNI ya se encuentra registrado como clave principal 
-    dentro del diccionario de alumnos del sistema.
-    """
-    return dni in diccionario_alumnos
-
-def validar_edad(edad_str: str) -> int | None:
-    """
-    Valida que la edad ingresada sea un número entero, que no sea negativa
-    y que se encuentre dentro de un límite biológico lógico (máximo 120 años).
-    Si es válida, devuelve el entero. Si no, devuelve None.
-    """
-    edad_limpia = edad_str.strip()
-    if not edad_limpia.isdigit():
-        return None
+    Solicita el DNI asegurando que solo contenga números y tenga entre 7 y 8 dígitos.
     
-    edad_num = int(edad_limpia)
-    # Condición métrica estricta: entre 0 y 120 años
-    if edad_num < 0 or edad_num > 120:
-        return None
+    Args:
+        mensaje (str): El texto informativo para pedir el DNI en la terminal.
         
-    return edad_num
-
-def validar_nota(nota_str: str) -> float | None:
+    Returns:
+        str: El DNI validado en formato texto (ideal para usar como clave de diccionario).
     """
-    Valida que la nota ingresada corresponda a un valor numérico real (float)
-    y que se encuentre estrictamente dentro del rango académico de 0 a 10.
-    Si es válida, devuelve el float. Si no, devuelve None.
-    """
-    nota_limpia = nota_str.strip().replace(",", ".")
-    
-    try:
-        nota_num = float(nota_limpia)
-        if nota_num >= 0.0 and nota_num <= 10.0:
-            return nota_num
-        return None
-    except ValueError:
-        return None
-
-def validar_texto_vacio(texto_str: str) -> str | None:
-    """
-    Asegura que campos alfabéticos críticos (Nombre, Apellido) no queden
-    vacíos y contengan únicamente caracteres alfabéticos (letras y espacios).
-    Bloquea números o símbolos especiales.
-    """
-    texto_limpio = texto_str.strip()
-    if len(texto_limpio) == 0:
-        return None
-    
-    # Reemplazamos los espacios para validar puramente caracteres alfabéticos
-    # Esto permite nombres compuestos como "Juan Carlos" pero rechaza "Juan123"
-    if not texto_limpio.replace(" ", "").isalpha():
-        return None
+    while True:
+        dni = input(mensaje)
         
-    return texto_limpio.title()
+        if dni.isdigit() == True:
+            if len(dni) >= 7 and len(dni) <= 8:
+                return dni
+            else:
+                print("Error: El DNI debe tener entre 7 y 8 dígitos.")
+        else:
+            print("Error: Ingreso inválido. El DNI debe contener únicamente números.")
+
+def validar_dni_duplicado(dni, alumnos):
+    """
+    Comprueba si un número de DNI ya está registrado como clave en el sistema.
+    
+    Args:
+        dni (str): El documento de identidad que se quiere verificar.
+        alumnos (dict): El diccionario que almacena los alumnos registrados.
+        
+    Returns:
+        bool: True si el DNI ya existe, False en caso contrario.
+    """
+    if dni in alumnos:
+        return True
+    else:
+        return False
+
+def validar_edad(mensaje):
+    """
+    Solicita la edad controlando que sean solo números para evitar que el programa falle.
+    
+    Args:
+        mensaje (str): El texto informativo en la terminal.
+        
+    Returns:
+        int: Un número entero validado entre 1 y 120 años.
+    """
+    while True:
+        entrada = input(mensaje)
+        
+        if entrada.isdigit() == True:
+            edad = int(entrada)
+            if edad >= 1 and edad <= 120:
+                return edad
+            else:
+                print("Error: La edad debe estar entre 1 y 120 años.")
+        else:
+            print("Error: Ingresó letras o caracteres inválidos. Solo se permiten números enteros.")
+
+def validar_nota(mensaje):
+    """
+    Solicita la nota verificando que sea un valor numérico válido (entero o con decimales).
+    
+    Args:
+        mensaje (str): El texto informativo en la terminal.
+        
+    Returns:
+        float: Un número decimal validado entre 0.0 y 10.0.
+    """
+    while True:
+        entrada = input(mensaje)
+        
+        if entrada.replace(".", "", 1).isdigit() == True:
+            nota = float(entrada)
+            if nota >= 0.0 and nota <= 10.0:
+                return nota
+            else:
+                print("Error: La nota debe ser un número entre 0 y 10.")
+        else:
+            print("Error: Ingreso inválido. Use solo números (y un punto para decimales).")
+
+def validar_texto(mensaje):
+    """
+    Asegura que el ingreso sea únicamente de letras, sin números ni símbolos raros.
+    
+    Args:
+        mensaje (str): El texto informativo para guiar al usuario.
+        
+    Returns:
+        str: El texto validado (permite espacios entre nombres).
+    """
+    while True:
+        texto = input(mensaje)
+        
+        if texto.replace(" ", "").isalpha() == True:
+            return texto
+        else:
+            print("Error: El campo no puede estar vacío y debe contener únicamente letras.")

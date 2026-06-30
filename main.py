@@ -2,43 +2,58 @@ import archivos
 import alumnos
 import estadisticas
 
-RUTA_BASE_DATOS = "alumnos.json"
-
-def mostrar_menu() -> None:
-    # Ajustado rigurosamente al diseño del enunciado original
-    print("\n======== GESTIÓN DE ALUMNOS ========")
-    print("1. Registrar alumno")
-    print("2. Listar alumnos")
-    print("3. Buscar alumno")
-    print("4. Modificar alumno")
-    print("5. Eliminar alumno")
-    print("6. Ver estadísticas")
-    print("7. Salir")
-
-def ejecutar_aplicacion() -> None:
-    diccionario_alumnos = archivos.cargar_alumnos(RUTA_BASE_DATOS)
+def iniciar_programa():
+    """
+    Punto de entrada general del sistema. Carga los datos e inicia el bucle del menú interactivo.
     
-    while True:
-        mostrar_menu()
-        opcion = input("Seleccione una opción: ").strip()
+    Args:
+        Ninguno.
         
-        if opcion == "1":
-            alumnos.registrar_alumno(diccionario_alumnos, RUTA_BASE_DATOS)
-        elif opcion == "2":
-            alumnos.listar_alumnos(diccionario_alumnos)
-        elif opcion == "3":
-            alumnos.buscar_alumno(diccionario_alumnos)
-        elif opcion == "4":
-            alumnos.modificar_alumno(diccionario_alumnos, RUTA_BASE_DATOS)
-        elif opcion == "5":
-            alumnos.eliminar_alumno(diccionario_alumnos, RUTA_BASE_DATOS)
-        elif opcion == "6":
-            estadisticas.ver_estadisticas(diccionario_alumnos)
-        elif opcion == "7":
-            print("\nSaliendo del sistema...")
-            break
-        else:
-            print("Error: Opción inválida. Intente nuevamente.")
+    Returns:
+        None.
+    """
+    base_alumnos = archivos.cargar_datos()
 
-if __name__ == "__main__":
-    ejecutar_aplicacion()
+    while True:
+        print("\n=====================================")
+        print("  SISTEMA DE GESTIÓN DE ALUMNOS UTN  ")
+        print("=====================================")
+        print("1. Registrar Alumno")
+        print("2. Modificar Alumno")
+        print("3. Eliminar Alumno")
+        print("4. Buscar Alumno")
+        print("5. Mostrar Alumnos")
+        print("6. Calcular Estadísticas")
+        print("7. Salir")
+        print("=====================================")
+        
+        opcion = input("Seleccione una opción: ")
+
+        match opcion:
+            case "1":
+                alumnos.registrar_alumno(base_alumnos)
+                # Auto-guardado después de agregar
+                archivos.guardar_datos(base_alumnos) 
+            case "2":
+                alumnos.modificar_alumno(base_alumnos)
+                # Auto-guardado después de modificar
+                archivos.guardar_datos(base_alumnos) 
+            case "3":
+                alumnos.eliminar_alumno(base_alumnos)
+                # Auto-guardado después de eliminar
+                archivos.guardar_datos(base_alumnos) 
+            case "4":
+                alumnos.buscar_alumno(base_alumnos)
+            case "5":
+                alumnos.mostrar_alumnos(base_alumnos)
+            case "6":
+                estadisticas.calcular_estadisticas(base_alumnos)
+            case "7":
+                # Como ya se guarda solo, simplemente nos despedimos y rompemos el bucle
+                print("Saliendo del sistema. ¡Éxitos en la cursada!")
+                break
+            case _:
+                print("Opción inválida, intente de nuevo.")
+
+# Ejecución única de la aplicación
+iniciar_programa()

@@ -1,140 +1,160 @@
 import validaciones
-import archivos
 
-def registrar_alumno(diccionario_alumnos: dict, ruta_archivo: str) -> None:
-    print("\n--- Registrar Alumno ---")
-    while True:
-        dni = input("Ingrese el DNI: ").strip()
-        if not validaciones.validar_dni_formato(dni):
-            print("Error: Formato de DNI inválido.")
-            continue
-        if validaciones.validar_dni_duplicado(dni, diccionario_alumnos):
-            print("Error: El DNI ya se encuentra registrado.")
-            return
-        break
-
-    while True:
-        nombre_raw = input("Ingrese el Nombre: ")
-        nombre = validaciones.validar_texto_vacio(nombre_raw)
-        if nombre is None:
-            print("Error: Nombre inválido.")
-            continue
-        break
-
-    while True:
-        apellido_raw = input("Ingrese el Apellido: ")
-        apellido = validaciones.validar_texto_vacio(apellido_raw)
-        if apellido is None:
-            print("Error: Apellido inválido.")
-            continue
-        break
-
-    while True:
-        edad_raw = input("Ingrese la Edad: ")
-        edad = validaciones.validar_edad(edad_raw)
-        if edad is None:
-            print("Error: La edad no puede ser negativa ni superar los 120 años.")
-            continue
-        break
-
-    while True:
-        nota_raw = input("Ingrese la Nota (0-10): ")
-        nota = validaciones.validar_nota(nota_raw)
-        if nota is None:
-            print("Error: La nota debe estar entre 0 y 10.")
-            continue
-        break
-
-    diccionario_alumnos[dni] = {
-        "nombre": nombre,
-        "apellido": apellido,
-        "edad": edad,
-        "nota": nota
-    }
-
-    if archivos.guardar_alumnos(ruta_archivo, diccionario_alumnos):
-        print("Alumno registrado con éxito.")
-
-def listar_alumnos(diccionario_alumnos: dict) -> None:
-    print("\n--- Listado de Alumnos ---")
-    if not diccionario_alumnos:
-        print("No hay alumnos registrados.")
-        return
+def registrar_alumno(alumnos):
+    """
+    Pide los datos de un estudiante, los valida y los inserta en el diccionario principal.
     
-    # Formato vertical sugerido de manera exacta por la consigna
-    for dni, datos in diccionario_alumnos.items():
-        print(f"DNI: {dni}")
-        print(f"Nombre: {datos['nombre']}")
-        print(f"Apellido: {datos['apellido']}")
-        print(f"Edad: {datos['edad']}")
-        print(f"Nota: {datos['nota']}")
-        print("-" * 30)
-
-def buscar_alumno(diccionario_alumnos: dict) -> None:
-    print("\n--- Buscar Alumno ---")
-    dni = input("Ingrese el DNI a buscar: ").strip()
-    if dni in diccionario_alumnos:
-        datos = diccionario_alumnos[dni]
-        print(f"\nAlumno Encontrado:")
-        print(f"DNI: {dni}")
-        print(f"Nombre: {datos['nombre']}")
-        print(f"Apellido: {datos['apellido']}")
-        print(f"Edad: {datos['edad']}")
-        print(f"Nota: {datos['nota']}")
+    Args:
+        alumnos (dict): El diccionario principal donde se agregará el nuevo registro.
+        
+    Returns:
+        None. Modifica el diccionario recibido por parámetro.
+    """
+    print("\n--- REGISTRAR NUEVO ALUMNO ---")
+    dni = validaciones.validar_dni("Ingrese el DNI del alumno: ")
+    
+    if validaciones.validar_dni_duplicado(dni, alumnos) == True:
+        print("Error: Ya existe un alumno con ese DNI.")
     else:
-        print("Error: Alumno no encontrado.")
+        nombre = validaciones.validar_texto("Ingrese el Nombre: ")
+        apellido = validaciones.validar_texto("Ingrese el Apellido: ")
+        edad = validaciones.validar_edad("Ingrese la Edad: ")
+        nota = validaciones.validar_nota("Ingrese la Nota Final: ")
 
-def modificar_alumno(diccionario_alumnos: dict, ruta_archivo: str) -> None:
-    print("\n--- Modificar Alumno ---")
-    dni = input("Ingrese el DNI del alumno a modificar: ").strip()
-    if dni not in diccionario_alumnos:
-        print("Error: El alumno no existe.")
-        return
+        alumno_nuevo = {
+            "nombre": nombre,
+            "apellido": apellido,
+            "edad": edad,
+            "nota": nota
+        }
+        
+        alumnos[dni] = alumno_nuevo
+        print("Alumno registrado con éxito en la memoria.")
 
-    datos_actuales = diccionario_alumnos[dni]
-    print("(Presione ENTER para mantener el valor actual)")
+def modificar_alumno(alumnos):
+    """
+    Busca un estudiante por DNI y permite actualizar de forma individual sus campos
+    (nombre, apellido, edad y nota). Si el campo se deja vacío, no se modifica.
+    
+    Args:
+        alumnos (dict): El diccionario principal donde se encuentra el estudiante.
+        
+    Returns:
+        None.
+    """
+    print("\n--- MODIFICAR ALUMNO ---")
+    dni = validaciones.validar_dni("Ingrese el DNI del alumno a modificar: ")
 
-    while True:
-        nombre_raw = input(f"Nombre [{datos_actuales['nombre']}]: ")
-        if nombre_raw.strip() == "": break
-        valido = validaciones.validar_texto_vacio(nombre_raw)
-        if valido: datos_actuales['nombre'] = valido; break
-        print("Error: Nombre inválido.")
+    if dni in alumnos:
+        print("Deje el espacio en blanco (presione Enter) si no desea modificar el campo.")
+        
+        # --- Modificar Nombre ---
+        while True:
+            nombre = input("Nuevo Nombre: ")
+            if nombre == "":
+                break
+            elif nombre.replace(" ", "").isalpha() == True:
+                alumnos[dni]["nombre"] = nombre
+                break
+            else:
+                print("Error: El nombre debe contener únicamente letras.")
 
-    while True:
-        apellido_raw = input(f"Apellido [{datos_actuales['apellido']}]: ")
-        if apellido_raw.strip() == "": break
-        valido = validaciones.validar_texto_vacio(apellido_raw)
-        if valido: datos_actuales['apellido'] = valido; break
-        print("Error: Apellido inválido.")
+        # --- Modificar Apellido ---
+        while True:
+            apellido = input("Nuevo Apellido: ")
+            if apellido == "":
+                break
+            elif apellido.replace(" ", "").isalpha() == True:
+                alumnos[dni]["apellido"] = apellido
+                break
+            else:
+                print("Error: El apellido debe contener únicamente letras.")
 
-    while True:
-        edad_raw = input(f"Edad [{datos_actuales['edad']}]: ")
-        if edad_raw.strip() == "": break
-        valido = validaciones.validar_edad(edad_raw)
-        if valido is not None: datos_actuales['edad'] = valido; break
-        print("Error: Edad inválida.")
+        # --- Modificar Edad ---
+        while True:
+            edad_str = input("Nueva Edad: ")
+            if edad_str == "":
+                break
+            elif edad_str.isdigit() == True:
+                edad = int(edad_str)
+                if edad >= 1 and edad <= 120:
+                    alumnos[dni]["edad"] = edad
+                    break
+                else:
+                    print("Error: La edad debe estar entre 1 y 120 años.")
+            else:
+                print("Error: Ingreso inválido. Use solo números enteros.")
 
-    while True:
-        nota_raw = input(f"Nota [{datos_actuales['nota']}]: ")
-        if nota_raw.strip() == "": break
-        valido = validaciones.validar_nota(nota_raw)
-        if valido is not None: datos_actuales['nota'] = valido; break
-        print("Error: Nota inválida.")
+        # --- Modificar Nota ---
+        while True:
+            nota_str = input("Nueva Nota: ")
+            if nota_str == "":
+                break
+            elif nota_str.replace(".", "", 1).isdigit() == True:
+                nota = float(nota_str)
+                if nota >= 0.0 and nota <= 10.0:
+                    alumnos[dni]["nota"] = nota
+                    break
+                else:
+                    print("Error: La nota debe ser un número entre 0 y 10.")
+            else:
+                print("Error: Ingreso inválido. Use solo números (y un punto para decimales).")
 
-    if archivos.guardar_alumnos(ruta_archivo, diccionario_alumnos):
-        print("Datos modificados correctamente.")
-
-def eliminar_alumno(diccionario_alumnos: dict, ruta_archivo: str) -> None:
-    print("\n--- Eliminar Alumno ---")
-    dni = input("Ingrese el DNI del alumno a eliminar: ").strip()
-    if dni in diccionario_alumnos:
-        confirmar = input(f"¿Seguro que desea eliminar a {diccionario_alumnos[dni]['nombre']}? (S/N): ").strip().upper()
-        if confirmar == "S":
-            del diccionario_alumnos[dni]
-            if archivos.guardar_alumnos(ruta_archivo, diccionario_alumnos):
-                print("Alumno eliminado correctamente.")
-        else:
-            print("Operación cancelada.")
+        print("Modificación realizada con éxito.")
     else:
-        print("Error: El DNI no existe.")
+        print("El DNI no se encuentra registrado en el sistema.")
+
+def eliminar_alumno(alumnos):
+    """
+    Remueve de forma permanente un registro de alumno usando su DNI como clave de búsqueda.
+    
+    Args:
+        alumnos (dict): El diccionario principal de donde se eliminará el registro.
+        
+    Returns:
+        None.
+    """
+    print("\n--- ELIMINAR ALUMNO ---")
+    dni = validaciones.validar_dni("Ingrese el DNI del alumno a dar de baja: ")
+
+    if dni in alumnos:
+        del alumnos[dni]
+        print("Alumno eliminado correctamente.")
+    else:
+        print("No se encontró ningún alumno con ese DNI.")
+
+def buscar_alumno(alumnos):
+    """
+    Busca un alumno específico por su DNI y muestra sus datos si lo encuentra.
+    
+    Args:
+        alumnos (dict): El diccionario principal donde se realiza la búsqueda.
+        
+    Returns:
+        None.
+    """
+    print("\n--- BUSCAR ALUMNO ---")
+    dni = validaciones.validar_dni("Ingrese el DNI del alumno a buscar: ")
+
+    if dni in alumnos:
+        datos = alumnos[dni]
+        print(f"DNI: {dni} | {datos['apellido']}, {datos['nombre']} | Edad: {datos['edad']} | Nota: {datos['nota']}")
+    else:
+        print("No se encontró ningún alumno con ese DNI.")
+
+def mostrar_alumnos(alumnos):
+    """
+    Itera sobre el diccionario para listar a todos los alumnos con un formato legible.
+    
+    Args:
+        alumnos (dict): El diccionario principal que contiene los datos.
+        
+    Returns:
+        None.
+    """
+    print("\n--- LISTADO DE ALUMNOS ---")
+    if alumnos == {}:
+        print("La base de datos está vacía.")
+    else:
+        for dni, datos in alumnos.items():
+            print(f"DNI: {dni} | {datos['apellido']}, {datos['nombre']} | Edad: {datos['edad']} | Nota: {datos['nota']}")
