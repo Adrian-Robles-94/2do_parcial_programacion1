@@ -2,6 +2,8 @@
 **Institución:** UTN Avellaneda  
 **Estudiante:** Robles, Maximiliano Adrian  
 **Fecha:** 30 de Junio de 2026  
+**División:** 316
+**DNI:** 38562905
 
 ---
 
@@ -26,7 +28,7 @@
 
 ### Parte B - Razonamiento Teórico
 1. **Múltiples listas separadas para datos relacionados:** Es propenso a errores críticos de consistencia. Si un elemento se elimina, modifica o desordena en una lista, se rompe la sincronización de índices con las demás listas, corrompiendo la relación de los datos.
-2. **Ventajas de la estructura clave-valor para búsquedas:** Ofrece una velocidad de acceso directo en tiempo constante promedio O(1). No requiere recorrer secuencialmente la estructura con bucles `for`, optimizando el rendimiento.
+2. **Ventajas de la estructura clave-valor para búsquedas:** Ofrece una velocidad de acceso directo en tiempo constante promedio. No requiere recorrer secuencialmente la estructura con bucles `for`, optimizando el rendimiento.
 3. **Utilidad de no permitir duplicados en sistemas reales:** Previene la redundancia de datos y asegura la unicidad de registros críticos del negocio como documentos de identidad (DNI), pasaportes o correos electrónicos de usuarios.
 4. **Memoria (RAM) vs. Archivos (Disco):**
   * *Memoria:* Es volátil y ultra rápida; los datos se pierden al apagar el sistema. Se usa para variables temporales y procesamiento activo.
@@ -63,8 +65,7 @@ A continuación se transcriben las preguntas completas del examen junto con la s
 **E.** Los diccionarios no permiten almacenar otros diccionarios.  
 **F.** Son útiles para representar entidades como alumnos, libros o productos.  
 
-> **Respuesta**: Opciones Correctas: A, B, D, F  
-> **Justificación**: Los diccionarios implementan el modelo asociativo en Python. Exigen que las claves sean únicas para poder recuperar los valores asociados de forma directa y eficiente sin ambigüedades. Son la estructura ideal para mapear registros o entidades del mundo real. Las opciones C y E son falsas porque las versiones modernas de Python preservan el orden de inserción por defecto y los diccionarios admiten perfectamente la anidación de otras estructuras complejas dentro de sus valores.
+> **Respuesta**: A, B, D, F  
 
 ---
 
@@ -76,8 +77,7 @@ A continuación se transcriben las preguntas completas del examen junto con la s
 **E.** Siempre ocupan más memoria que las listas.  
 **F.** Admiten acceso mediante índices.  
 
-> **Respuesta**: Opciones Correctas: B, C, D, F  
-> **Justificación**: La principal característica técnica de una tupla es su inmutabilidad, lo que garantiza que sus elementos no puedan ser alterados ni reasignados en tiempo de ejecución una vez definidos, protegiendo los datos fijos. Además, permiten colecciones de datos heterogéneos y se accede a ellos a través de índices numéricos enteros. La opción A es falsa por la naturaleza misma de la estructura y la E es incorrecta porque, al ser estáticas, optimizan el espacio y consumen menos memoria que una lista.
+> **Respuesta**: B, C, D, F  
 
 ---
 
@@ -89,8 +89,7 @@ A continuación se transcriben las preguntas completas del examen junto con la s
 **E.** Son adecuados para representar colecciones de elementos únicos.  
 **F.** Mantienen necesariamente el orden de inserción.  
 
-> **Respuesta**: Opciones Correctas: B, C, E  
-> **Justificación**: Los conjuntos matemáticos "set" están diseñados específicamente para almacenar elementos únicos, descartando de forma automática cualquier ingreso duplicado en la colección. Debido a que su ordenamiento interno está basado en tablas de hash para búsquedas veloces, carecen de un orden posicional fijo. Por este motivo, las opciones A, D y F son falsas: no toleran duplicados, no respetan el orden de entrada y cualquier intento de acceder mediante corchetes e índices producirá un error de tipo "TypeError".
+> **Respuesta**: B, C, E  
 
 ---
 
@@ -102,8 +101,7 @@ A continuación se transcriben las preguntas completas del examen junto con la s
 **E.** Todos sus elementos deben ser del mismo tipo.  
 **F.** Permiten acceder a una posición utilizando fila y columna.  
 
-> **Respuesta**: Opciones Correctas: A, B, F  
-> **Justificación**: Python no cuenta con un tipo de dato primitivo integrado llamado "matrix", por lo que la forma estándar de representarlas es a través de listas anidadas (listas que contienen otras listas). Esto permite modelar estructuras bidimensionales de filas y columnas, accediendo a sus celdas mediante la sintaxis de doble índice "matriz[fila][columna]". Las opciones C, D y E son incorrectas ya que no es un tipo nativo, se recorren de manera simple con bucles "for" anidados y sus elementos pueden ser de tipos mixtos.
+> **Respuesta**: A, B, F  
 
 ---
 
@@ -115,8 +113,7 @@ A continuación se transcriben las preguntas completas del examen junto con la s
 **E.** La instrucción with open(...) ayuda a gestionar correctamente el cierre del archivo.  
 **F.** Los archivos solo pueden almacenar texto.  
 
-> **Respuesta**: Opciones Correctas: A, B, C, E  
-> **Justificación**: Los archivos ofrecen persistencia en el almacenamiento secundario, logrando que la información se conserve intacta al cerrar el sistema. Los caracteres "r" y "w" definen las operaciones nativas de lectura y escritura (origen de "read" y "write"), mientras que el administrador de contexto "with" asegura que el archivo se cierre correctamente en el sistema operativo ante cualquier eventualidad o fallo. Las opciones D y F son falsas porque los datos son permanentes y los archivos pueden almacenar datos binarios, imágenes o estructuras serializadas como archivos JSON.
+> **Respuesta**: A, B, C, E  
 
 ---
 
@@ -128,8 +125,7 @@ A continuación se transcriben las preguntas completas del examen junto con la s
 **E.** No pueden almacenarse dentro de estructuras de datos.  
 **F.** Este comportamiento permite construir programas más reutilizables y flexibles.  
 
-> **Respuesta**: Opciones Correctas: A, B, C, F  
-> **Justificación**: Que las funciones sean consideradas "ciudadanos de primera clase" significa que el lenguaje las trata con los mismos derechos que a cualquier otro objeto (como enteros o cadenas). Esto permite asignarlas a variables para usarlas con alias, pasarlas como parámetros a otras funciones (técnica conocida como "callbacks") o devolverlas como resultado de un proceso. Las opciones D y E son incorrectas porque rompen este principio fundamental al negar que se puedan guardar en estructuras o invocar mediante referencias alternativas.
+> **Respuesta**: A, B, C, F  
 
 ---
 

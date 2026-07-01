@@ -1,1 +1,20 @@
-{}
+{
+    "38562905": {
+        "nombre": "Adrian",
+        "apellido": "Ruiz",
+        "edad": 31,
+        "nota": 10.0
+    },
+    "11111111": {
+        "nombre": "Enzo",
+        "apellido": "Perez",
+        "edad": 35,
+        "nota": 9.0
+    },
+    "22222222": {
+        "nombre": "Lucila",
+        "apellido": "Garcia",
+        "edad": 18,
+        "nota": 3.0
+    }
+}
